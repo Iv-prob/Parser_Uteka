@@ -1,6 +1,12 @@
 from playwright.sync_api import sync_playwright
 
 
+def scale(count, page):
+    for _ in range(count):
+        page.wait_for_timeout(600)
+        page.mouse.wheel(delta_y=300, delta_x=0)
+
+
 def scroll(page):
     current_scroll = 0
     scroll_step = 600
@@ -17,7 +23,7 @@ def scroll(page):
 
 
 def handle_response(response):
-    if 'map.Pharmacies' in response and response.statatus == 200:
+    if 'map.Pharmacies' in response.url and response.status == 200:
         try:
             all_responses.append(response.json())
         except Exception:
@@ -52,15 +58,11 @@ def get_uteka_data(map_url, channel='chrome', city='Москва'):
         # узнаём высоту и ширину экрана заказчика
         dimensions = {'width': page.evaluate('window.innerWidth'), 'height': page.evaluate('window.innerHeight')}
 
-        # скроллим, чтобы весь город было видно
+        # перемещаем курсор в центр экрана
         page.mouse.move(x=dimensions['width'] // 2, y=dimensions['height'] // 2)
-        page.wait_for_timeout(600)
-        page.mouse.wheel(delta_y=500, delta_x=0)
-        page.wait_for_timeout(1000)
-        page.mouse.wheel(delta_y=500, delta_x=0)
-        page.wait_for_timeout(1000)
-        page.mouse.wheel(delta_y=500, delta_x=0)
-        page.wait_for_timeout(1000)
+
+        # отдаляем карту
+        scale(5, page)
 
         page.get_by_role('button', name='Смотреть списком').click()
         page.wait_for_timeout(600)

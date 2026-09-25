@@ -13,4 +13,5 @@ if __name__ == '__main__':
                        '&fastOrderProductCount=1']
                       )
 
-    get_uteka_data(map_url=map_url, channel=settings['browser'], city=settings['city'])
+    all_response = get_uteka_data(map_url=map_url, channel=settings['browser'], city=settings['city'])
+    print(all_response)
