@@ -26,6 +26,7 @@ def handle_response(response):
     global all_responses
     if 'map.Pharmacies' in response.url and response.status == 200:
         try:
+            print(response.json())
             all_responses.append(response.json())
         except Exception:
             pass
