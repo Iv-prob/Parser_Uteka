@@ -14,4 +14,19 @@ if __name__ == '__main__':
                       )
 
     all_response = get_uteka_data(map_url=map_url, channel=settings['browser'], city=settings['city'])
-    print(all_response)
+
+    count = 1
+    result = {}
+    for i in all_response:
+        for y in i['result']['pharmacies']:
+            title = i['result']['pharmacies'][str(y)]['pharmacy']['title']
+            address = i['result']['pharmacies'][str(y)]['pharmacy']['address']
+            price = i['result']['pharmacies'][str(y)]['cart'][0]['price']
+            result[price] = [title, address]
+            count += 1
+
+    sorted_result = sorted(result)
+    for i in sorted_result:
+        print(i, result[i])
+    print(count)
+
