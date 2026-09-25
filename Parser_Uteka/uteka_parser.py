@@ -34,12 +34,13 @@ def get_uteka_data(map_url, channel='chrome', city='Москва'):
         page.wait_for_timeout(600)
 
         # переводим поиск в нужный город
-        page.get_by_role('button', name='1').click()
+        if page.locator('button', name='1').wait_for(state="visible"):
+            page.get_by_role('button', name='1').click()
         page.wait_for_timeout(600)
         page.locator('.pickup-picker-filters-content__city').click()
         page.wait_for_timeout(600)
         page.get_by_role('link', name=city, exact=True).click()
-        page.wait_for_timeout(600)
+        page.wait_for_timeout(1000)
         # page.evaluate('window.scrollTo(0,0)')
         # page.wait_for_timeout(600)
 
