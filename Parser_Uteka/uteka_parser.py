@@ -38,6 +38,18 @@ def get_uteka_data(map_url, channel='chrome', city='Москва'):
         page.wait_for_timeout(1000)
 
         page.get_by_role('button', name='Смотреть списком').click()
+        page.wait_for_timeout(6000)
+
+        last_height = page.evaluate('document.body.scrollHeight')
+        while True:
+            page.evaluate('window.scrollTo(0, document.body.scrollHeight')
+            page.wait_for_timeout(2000)
+            new_height = page.evaluate('document.body.scrollHeight')
+
+            if new_height == last_height:
+                break
+
+            last_height = new_height
         #
         # with page.expect_response(lambda response: 'map.Cluster' in response.url) as response_info:
         #     page.get_by_role("button", name='Сегодня').click()
