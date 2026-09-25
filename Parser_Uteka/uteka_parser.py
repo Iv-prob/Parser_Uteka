@@ -25,9 +25,10 @@ def get_uteka_data(map_url, channel='chrome', city='Москва'):
         page.wait_for_timeout(600)
 
         # узнаём высоту и ширину экрана заказчика
-        dimensions = page.viewport_size
+        dimensions = {'width': page.evaluate('window.innerWidth'), 'height': page.evaluate('window.innerHeight')}
 
-        page.mouse.move(x=dimensions['width'] // 2, y=dimensions['hight'] // 2)
+        # скроллим, чтобы весь город было видно
+        page.mouse.move(x=dimensions['width'] // 2, y=dimensions['height'] // 2)
         page.wait_for_timeout(600)
         page.mouse.wheel(delta_y=500, delta_x=0)
         page.wait_for_timeout(1000)
@@ -35,13 +36,8 @@ def get_uteka_data(map_url, channel='chrome', city='Москва'):
         page.wait_for_timeout(1000)
         page.mouse.wheel(delta_y=500, delta_x=0)
         page.wait_for_timeout(1000)
-        # page.mouse.wheel(delta_y=500, delta_x=0)
-        # page.wait_for_timeout(1000)
-        # page.mouse.wheel(delta_y=500, delta_x=0)
-        # page.mouse.wheel(delta_y=500, delta_x=0)
-        # page.mouse.wheel(delta_y=500, delta_x=0)
-        # page.mouse.wheel(delta_y=500, delta_x=0)
-        # page.wait_for_timeout(10000)
+
+        page.get_by_role('button', name='Смотреть списком').click()
         #
         # with page.expect_response(lambda response: 'map.Cluster' in response.url) as response_info:
         #     page.get_by_role("button", name='Сегодня').click()
