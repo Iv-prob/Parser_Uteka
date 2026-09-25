@@ -13,10 +13,10 @@ if __name__ == '__main__':
                        '&fastOrderProductCount=1']
                       )
 
-    all_response = get_uteka_data(map_url=map_url, channel=settings['browser'], city=settings['city'])
+    all_response, first_result = get_uteka_data(map_url=map_url, channel=settings['browser'], city=settings['city'])
 
     count = 1
-    result = []
+    result = first_result
     for i in all_response:
         for y in i['result']['pharmacies']:
             title = i['result']['pharmacies'][str(y)]['pharmacy']['title']
