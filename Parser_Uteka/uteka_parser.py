@@ -21,9 +21,14 @@ def get_uteka_data(map_url, channel='chrome', city='Москва'):
         page.locator('.pickup-picker-filters-content__city').click()
         page.wait_for_timeout(600)
         page.get_by_role('link', name=city, exact=True).click()
-
         page.evaluate('window.scrollTo(0,0)')
-        page.mouse.move(x=960, y=540)
+        page.wait_for_timeout(600)
+
+        # узнаём высоту и ширину экрана заказчика
+        dimensions = page.viewport_size
+
+        page.mouse.move(x=dimensions['width'] / 2, y=dimensions['hight'] / 2)
+        page.wait_for_timeout(600)
         page.mouse.wheel(delta_y=500, delta_x=0)
         page.wait_for_timeout(1000)
         page.mouse.wheel(delta_y=500, delta_x=0)
