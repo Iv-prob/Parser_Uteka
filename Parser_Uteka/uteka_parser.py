@@ -71,6 +71,14 @@ def get_uteka_data(map_url, channel='chrome', city='Москва'):
         page.get_by_role('button', name='Смотреть списком').click()
         page.wait_for_timeout(600)
 
+        page.locator('.ui-price ui-price_type_high ui-price_size_s ui-price_theme_primary').wait_for(state="visible")
+        cards = page.locator('.pickup-picker-pharmacy-option-info').all()  # (Класс карточки уточни в инспекторе)
+        for card in cards:
+            # Вытаскиваем текст названия, адреса и цены прямо из блоков внутри карточки
+            title = card.locator('.ui-typography ui-text _size-mobile-200 _size-tablet-300').inner_text()
+            price = card.locator('.ui-price ui-price_type_high ui-price_size_s ui-price_theme_primary').inner_text()
+            print(title, price)
+
         page.on('response', handle_response)
 
         # скроллим вниз аптеки, формируем список
