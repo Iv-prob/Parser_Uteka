@@ -5,7 +5,7 @@ if __name__ == '__main__':
     with open('settings.json', 'r', encoding='utf-8') as file:
         settings = json.load(file)
 
-    url = 'https://spb.uteka.ru/product/bintli-t-bint-lipkiy-401948/'
+    url = 'https://spb.uteka.ru/product/detrimaks-vitamin-d3-365838/'
 
     id_product = url.split('/')[4].split('-')[-1]
     map_url = ''.join(['https://uteka.ru/checkout/pickup/picker/?isPickupOnly=true&fastOrderProductId=',
@@ -15,7 +15,6 @@ if __name__ == '__main__':
 
     all_response, first_result = get_uteka_data(map_url=map_url, channel=settings['browser'], city=settings['city'])
 
-    count = 1
     result = first_result
     for i in all_response:
         for y in i['result']['pharmacies']:
@@ -23,11 +22,9 @@ if __name__ == '__main__':
             address = i['result']['pharmacies'][str(y)]['pharmacy']['address']
             price = i['result']['pharmacies'][str(y)]['cart'][0]['price']
             result.append([int(price), title, address])
-            count += 1
 
-    count = count + len(result)
     result.sort()
     for i in result:
         print(i)
-    print(count)
+
 
