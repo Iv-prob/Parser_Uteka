@@ -1,6 +1,21 @@
 from playwright.sync_api import sync_playwright
 
 
+def scroll(page):
+    current_scroll = 0
+    scroll_step = 600
+    while True:
+        max_height = page.evaluate('document.body.scrollHeight')
+
+        current_scroll += scroll_step
+        page.evaluate(f'window.scrollTo(0, {current_scroll})')
+        page.wait_for_timeout(600)
+
+        if current_scroll >= max_height:
+            page.wait_for_timeout(3000)
+            break
+
+
 def get_uteka_data(map_url, channel='chrome', city='Москва'):
     with sync_playwright() as p:
         browser = p.chromium.launch_persistent_context(
@@ -25,8 +40,8 @@ def get_uteka_data(map_url, channel='chrome', city='Москва'):
         page.wait_for_timeout(600)
         page.get_by_role('link', name=city, exact=True).click()
         page.wait_for_timeout(600)
-        page.evaluate('window.scrollTo(0,0)')
-        page.wait_for_timeout(600)
+        # page.evaluate('window.scrollTo(0,0)')
+        # page.wait_for_timeout(600)
 
         # узнаём высоту и ширину экрана заказчика
         dimensions = {'width': page.evaluate('window.innerWidth'), 'height': page.evaluate('window.innerHeight')}
@@ -44,18 +59,19 @@ def get_uteka_data(map_url, channel='chrome', city='Москва'):
         page.get_by_role('button', name='Смотреть списком').click()
         page.wait_for_timeout(600)
 
-        current_scroll = 0
-        scroll_step = 600
-        while True:
-            max_height = page.evaluate('document.body.scrollHeight')
-
-            current_scroll += scroll_step
-            page.evaluate(f'window.scrollTo(0, {current_scroll})')
-            page.wait_for_timeout(600)
-
-            if current_scroll >= max_height:
-                page.wait_for_timeout(3000)
-                break
+        scroll(page)
+        # current_scroll = 0
+        # scroll_step = 600
+        # while True:
+        #     max_height = page.evaluate('document.body.scrollHeight')
+        #
+        #     current_scroll += scroll_step
+        #     page.evaluate(f'window.scrollTo(0, {current_scroll})')
+        #     page.wait_for_timeout(600)
+        #
+        #     if current_scroll >= max_height:
+        #         page.wait_for_timeout(3000)
+        #         break
 
 
         #
