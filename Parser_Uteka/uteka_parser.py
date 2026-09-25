@@ -1,6 +1,9 @@
 from playwright.sync_api import sync_playwright
 
 
+all_responses = []
+
+
 def scale(count, page):
     for _ in range(count):
         page.wait_for_timeout(600)
@@ -26,7 +29,6 @@ def handle_response(response):
     global all_responses
     if 'map.Pharmacies' in response.url and response.status == 200:
         try:
-            print(response.json())
             all_responses.append(response.json())
         except Exception:
             pass
@@ -69,7 +71,6 @@ def get_uteka_data(map_url, channel='chrome', city='Москва'):
         page.get_by_role('button', name='Смотреть списком').click()
         page.wait_for_timeout(600)
 
-        all_responses = []
         page.on('response', handle_response)
 
         # скроллим вниз аптеки, формируем список
