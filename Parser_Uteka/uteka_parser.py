@@ -14,13 +14,17 @@ def get_uteka_data(map_url, channel='chrome', city='Москва'):
         # создаём окно браузера
         page = browser.pages[0]
         page.goto(map_url)
+        page.wait_for_timeout(600)
         page.evaluate('window.scrollTo(0,0)')
+        page.wait_for_timeout(600)
 
         # переводим поиск в нужный город
         page.get_by_role('button', name='1').click()
+        page.wait_for_timeout(600)
         page.locator('.pickup-picker-filters-content__city').click()
         page.wait_for_timeout(600)
         page.get_by_role('link', name=city, exact=True).click()
+        page.wait_for_timeout(600)
         page.evaluate('window.scrollTo(0,0)')
         page.wait_for_timeout(600)
 
@@ -38,15 +42,15 @@ def get_uteka_data(map_url, channel='chrome', city='Москва'):
         page.wait_for_timeout(1000)
 
         page.get_by_role('button', name='Смотреть списком').click()
-        page.wait_for_timeout(6000)
+        page.wait_for_timeout(600)
 
         current_scroll = 0
-        scroll_step = 1000
+        scroll_step = 600
         while True:
             max_height = page.evaluate('document.body.scrollHeight')
 
             current_scroll += scroll_step
-            page.evaluate(f'window.scrollTo(0, {current_scroll}')
+            page.evaluate(f'window.scrollTo(0, {current_scroll})')
             page.wait_for_timeout(600)
 
             if current_scroll >= max_height:
@@ -60,7 +64,7 @@ def get_uteka_data(map_url, channel='chrome', city='Москва'):
         #     page.wait_for_timeout(5000)
         #
         # return response_info.value.json()
-        # page.wait_for_timeout(4000000)
+        page.wait_for_timeout(4000000)
 
 
 if __name__ == '__main__':
