@@ -23,6 +23,7 @@ def scroll(page):
 
 
 def handle_response(response):
+    global all_responses
     if 'map.Pharmacies' in response.url and response.status == 200:
         try:
             all_responses.append(response.json())
