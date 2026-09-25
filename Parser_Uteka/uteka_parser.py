@@ -16,6 +16,14 @@ def scroll(page):
             break
 
 
+def handle_response(response):
+    if 'map.Pharmacies' in response and response.statatus == 200:
+        try:
+            all_responses.append(response.json())
+        except Exception:
+            pass
+
+
 def get_uteka_data(map_url, channel='chrome', city='Москва'):
     with sync_playwright() as p:
         browser = p.chromium.launch_persistent_context(
@@ -34,15 +42,12 @@ def get_uteka_data(map_url, channel='chrome', city='Москва'):
         page.wait_for_timeout(600)
 
         # переводим поиск в нужный город
-        if page.locator('button', name='1').wait_for(state="visible"):
-            page.get_by_role('button', name='1').click()
-        page.wait_for_timeout(600)
+        page.get_by_role('button', name='1').click()
+        page.locator('.pickup-picker-filters-content__city').wait_for(state='visible')
         page.locator('.pickup-picker-filters-content__city').click()
         page.wait_for_timeout(600)
         page.get_by_role('link', name=city, exact=True).click()
         page.wait_for_timeout(1000)
-        # page.evaluate('window.scrollTo(0,0)')
-        # page.wait_for_timeout(600)
 
         # узнаём высоту и ширину экрана заказчика
         dimensions = {'width': page.evaluate('window.innerWidth'), 'height': page.evaluate('window.innerHeight')}
@@ -60,28 +65,15 @@ def get_uteka_data(map_url, channel='chrome', city='Москва'):
         page.get_by_role('button', name='Смотреть списком').click()
         page.wait_for_timeout(600)
 
+        all_responses = []
+        page.on('response', handle_response)
+
+        # скроллим вниз аптеки, формируем список
         scroll(page)
-        # current_scroll = 0
-        # scroll_step = 600
-        # while True:
-        #     max_height = page.evaluate('document.body.scrollHeight')
-        #
-        #     current_scroll += scroll_step
-        #     page.evaluate(f'window.scrollTo(0, {current_scroll})')
-        #     page.wait_for_timeout(600)
-        #
-        #     if current_scroll >= max_height:
-        #         page.wait_for_timeout(3000)
-        #         break
 
+        page.remove_listener('response', handle_response)
 
-        #
-        # with page.expect_response(lambda response: 'map.Cluster' in response.url) as response_info:
-        #     page.get_by_role("button", name='Сегодня').click()
-        #     page.wait_for_timeout(5000)
-        #
-        # return response_info.value.json()
-        page.wait_for_timeout(4000000)
+        return all_responses
 
 
 if __name__ == '__main__':
