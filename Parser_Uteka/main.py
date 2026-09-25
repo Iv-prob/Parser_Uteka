@@ -22,7 +22,7 @@ if __name__ == '__main__':
             title = i['result']['pharmacies'][str(y)]['pharmacy']['title']
             address = i['result']['pharmacies'][str(y)]['pharmacy']['address']
             price = i['result']['pharmacies'][str(y)]['cart'][0]['price']
-            result.append([price, title, address])
+            result.append([int(price), title, address])
             count += 1
 
     count = count + len(result)

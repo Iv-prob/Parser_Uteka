@@ -77,9 +77,9 @@ def get_uteka_data(map_url, channel='chrome', city='Москва'):
         for card in cards:
             title = card.locator('._size-tablet-300').inner_text()
             price = card.locator('.ui-price_theme_primary').inner_text()
-            price = price.split('\\')[0]
+            clean_price = price.replace('₽', '').replace(' ', '').replace('\u2008', '').replace('\xa0', '')
             address = card.locator('[data-test="address"]').inner_text()
-            first_result.append([price, title, address])
+            first_result.append([int(clean_price), title, address])
         print(first_result)
 
         page.on('response', handle_response)
