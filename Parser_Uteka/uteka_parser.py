@@ -1,7 +1,7 @@
 from playwright.sync_api import sync_playwright
 
 
-def get_uteka_data(map_url, channel='chrome'):
+def get_uteka_data(map_url, channel='chrome', city='Москва'):
     with sync_playwright() as p:
         browser = p.chromium.launch_persistent_context(
             'user_data',
@@ -11,14 +11,24 @@ def get_uteka_data(map_url, channel='chrome'):
             no_viewport=True,
         )
 
+        # создаём окно браузера
         page = browser.pages[0]
         page.goto(map_url)
         page.evaluate('window.scrollTo(0,0)')
 
+        # переводим поиск в нужный город
+        page.get_by_role('button', name='1').click()
+        page.locator('.pickup-picker-filters-content__city').click()
+        page.get_by_role('link', name=city).click()
+        page.wait_for_timeout(3000)
+
         # page.mouse.move(x=960, y=540)
         # page.mouse.wheel(delta_y=500, delta_x=0)
+        # page.wait_for_timeout(100)
         # page.mouse.wheel(delta_y=500, delta_x=0)
+        # page.wait_for_timeout(100)
         # page.mouse.wheel(delta_y=500, delta_x=0)
+        # page.wait_for_timeout(100)
         # page.mouse.wheel(delta_y=500, delta_x=0)
         # page.wait_for_timeout(1000)
         # page.mouse.wheel(delta_y=500, delta_x=0)
