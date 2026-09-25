@@ -25,6 +25,7 @@ if __name__ == '__main__':
             result.append([price, title, address])
             count += 1
 
+    count = count + len(result)
     result.sort()
     for i in result:
         print(i)
