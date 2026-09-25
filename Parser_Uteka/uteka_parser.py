@@ -80,7 +80,6 @@ def get_uteka_data(map_url, channel='chrome', city='Москва'):
             clean_price = price.replace('₽', '').replace(' ', '').replace('\u2008', '').replace('\xa0', '')
             address = card.locator('[data-test="address"]').inner_text()
             first_result.append([int(clean_price), title, address])
-        print(first_result)
 
         page.on('response', handle_response)
 

@@ -5,7 +5,7 @@ if __name__ == '__main__':
     with open('settings.json', 'r', encoding='utf-8') as file:
         settings = json.load(file)
 
-    url = 'https://spb.uteka.ru/product/prezervativy-durex-pleasuremax-343397/'
+    url = 'https://spb.uteka.ru/product/bintli-t-bint-lipkiy-401948/'
 
     id_product = url.split('/')[4].split('-')[-1]
     map_url = ''.join(['https://uteka.ru/checkout/pickup/picker/?isPickupOnly=true&fastOrderProductId=',
